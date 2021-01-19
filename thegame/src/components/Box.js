@@ -1,35 +1,31 @@
-import { MeshWobbleMaterial } from 'drei';
-import React, { useRef, useState } from 'react';
-// import { useSpring } from 'react-spring';
-import { useFrame } from 'react-three-fiber';
-import { useSpring, a } from 'react-spring/three';
+import React, { useRef, useState } from 'react'
+import { useFrame } from 'react-three-fiber'
 
-const Box = ( {position, args, color} ) => {
-    const mesh = useRef(null);
-    // useFrame(() => (mesh.current.rotation.y = mesh.current.rotation.y += 0.01));
+function Box(props) {
+  // This reference will give us direct access to the mesh
+  const mesh = useRef()
 
-    const [expand, setExpand] = useState(false);
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
 
-    const props = useSpring({
-        scale: expand ? [1.4, 1.4, 1.4] : [1, 1, 1]
-    });
-    return (
-        <a.mesh
-        onClick={() => setExpand(!expand)}
-        scale={props.scale}
-        castShadow
-        position={position}
-        ref={mesh}
-        >
-            <boxBufferGeometry attach='geometry' args={args}/>
-            {/* <meshStandardMaterial attach='material' color={color} /> */}
-            <MeshWobbleMaterial 
-                attach='material'
-                color={color}
-                speed={1}
-                factor={0.6} />
-        </a.mesh>
-    );
-};
+  // Rotate mesh every frame, this is outside of React without overhead
+  useFrame(() => {
+    mesh.current.rotation.x = mesh.current.rotation.y += 0.01
+  })
+
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+      <boxBufferGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
 
 export default Box;

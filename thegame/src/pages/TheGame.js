@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Canvas } from 'react-three-fiber';
-// import Box from '../components/Box';
+import Box from '../components/Box';
 // import Plane from '../components/Plane';
 import { softShadows, OrbitControls } from 'drei';
 import Menu from './Menu';
@@ -38,15 +38,15 @@ class TheGame extends Component {
                 <Canvas 
                     shadowMap
                     colorManagement
-                    camera={{ position: [0, 0, 55] }}
+                    camera={{ position: [0, 8, 10] }}
                 >
     
-                    <ambientLight intensity={2} />
-                    <pointLight position={[-10, 0, 20]} intensity={0.5}/>
+                    <ambientLight intensity={1} />
+                    <pointLight position={[0, 0, 20]} intensity={0.5} />
                     <directionalLight
                         castShadow
-                        position={[0, 10, 0]} 
-                        intensity={1.5} 
+                        position={[0, 0, 100]} 
+                        intensity={0.5} 
                         shadow-mapSize-width={1024}
                         shadow-mapSize-height={1024}
                         shadow-camera-far={50}
@@ -82,6 +82,7 @@ class TheGame extends Component {
                     
                     {/* <Rocket args={[100, 100]} color="#00FF00" /> */}
                     <Level1/>
+                    {/* <Box position={[-1.2, 0, 0]} /> */}
                     <OrbitControls />
                 </Canvas>
             </>

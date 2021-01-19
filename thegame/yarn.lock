@@ -10953,6 +10953,16 @@ use-asset@^0.1.5:
   dependencies:
     fast-deep-equal "^3.1.3"
 
+use-cannon@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/use-cannon/-/use-cannon-0.5.3.tgz#8641736e94df886ee683517185ad55c38b363f07"
+  integrity sha512-zVn1rRQJ3rw5grOkkNaxRcjS3AWsklrwHsOkmFiUq7Ac+jOE3CEJtASDK2ErScPe85c3BZDRO+/y9UU7VfaD1g==
+
+use-key-state@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/use-key-state/-/use-key-state-0.1.8.tgz#c6317656fe84c635bdda647f3ba11685f6b4521c"
+  integrity sha512-q8qPYv+kPtlq5Ip2PM05yT1P1+JFByjTBHAgsmNa/7P0C63Mjxevx1Bp9TO20tu8F2w3k3qx9x5mu8oKSQI9/w==
+
 use-memo-one@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.1.tgz#39e6f08fe27e422a7d7b234b5f9056af313bd22c"

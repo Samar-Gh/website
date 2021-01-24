@@ -3,8 +3,8 @@ import { FlatShading } from 'three'
 
 const Tree = (props) => {
     return (
-        <group scale={[2, 2, 2]} position={props.position} >
-            <mesh
+        <group scale={[2, 2, 2]} position={props.position}>
+            <mesh 
                 position={[0, 2.5, 0]}
                 rotation={[0, 2, 0]}
             >
@@ -19,6 +19,7 @@ const Tree = (props) => {
                 <meshStandardMaterial color="#009900" shading={FlatShading}/>
             </mesh>
             <mesh
+                castShadow
                 position={[0, 1.5, 0]}
                 rotation={[0, 1, 0]}
             >

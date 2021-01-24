@@ -1,109 +1,157 @@
-import React, { useRef, useState } from "react";
-import Model from "./Model";
-import car from "./models/Car.obj";
-import material from "./models/Car.mtl";
+import React, { useEffect, useState, useRef } from 'react'
+import * as CANNON from "cannon"
+import { Clock, Timer } from 'three'
 import { useFrame } from 'react-three-fiber'
-import { Clock } from 'three'
-import { useBox } from "use-cannon";
+import { useCylinder, useBox, useSphere } from 'use-cannon'
+import { useSpring, a } from 'react-spring/three';
 
-// let clock = new THREE.clock;
+// const BoxJoin = (props) => {
+//     const [ref, api] = useBox(() => ({ mass: 1, position: [0, 4, 0], rotation: [Math.PI / 2, 0, 0] }));
+//     api.velocity.set(props.velocity[0], props.velocity[1], props.velocity[2]);
 
-// const moveSledge = () => {
-//     var delta = clock.getDelta(); // seconds
-//     var moveDistance = 500 * delta; // n pixels per second
-//     var rotateAngle = Math.PI / 2 * delta; // 90 deg per second
+//     return (
+//       <group>
+//         <mesh
+//           ref={ref}
+//           position={[0, 4, 0]}
+//           castShadow
+//           receiveShadow
+          
+//         >
+//         <boxBufferGeometry attach="geometry" args={[0.1, 1, 1]} />
+//         <meshPhongMaterial
+//           attach="material"
+//           color={props.color}
+//           // emissive="#aa0000"
+//           side="DoubleSide"
+//           flatShading="true" />
+//       </mesh>
+//       </group>
+//     );
+// }
+
+// const Wheel = (props) => {
+//   let velocity = [0, 0, 0]
+
+//   useFrame(() => {
+//     if (props.forward) {
+//       velocity = [1, 0, 0]
+//     }
+//     if (props.back) {
+//       velocity = [-1, 0, 0]
+//     }
+//   })
+//   return(
+//     <group>
+//       <BoxJoin color="#11FF99" velocity={velocity}/>
+//     </group>
+//   )
+// }
+
+const Wheel = (props) => {
+  const [ref, api] = useBox(() => ({ mass: 2, position: [0, 4, 0], rotation: [Math.PI / 2, 0, 0] }));
+  // const [ref, api] = useSphere(() => ({ mass: 10, position: [0, 4, 0], rotation: [Math.PI / 2, 0, 0] }));
+
+  useFrame(() => {
+    if (props.forward) {
+      api.velocity.set(3, 0, 0);
+    }
+    if (props.back) {
+      api.velocity.set(-3, 0, 0);
+    }
+  })
   
-//     // move forwards, backwards, left, or right
-//     if (pressed['W'] || pressed['ARROWUP']) {
-//       sphereBody.velocity.z += moveDistance;
-//     }
-//     if (pressed['S'] || pressed['ARROWDOWN']) {
-//       sphereBody.velocity.z -= moveDistance;
-//     }
-//     if (pressed['A'] || pressed['ARROWLEFT']) {
-//       sphereBody.velocity.x += moveDistance;
-//     }
-//     if (pressed['D'] || pressed['ARROWRIGHT']) {
-//       sphereBody.velocity.x -= moveDistance;
-//     }
-//   }
+  return (
+    <group>
+      <mesh
+      onClick={() => {
+        api.velocity.set(0, 2, 0);
+      }}
+      ref={ref}
+      position={[0, 4, 0]}
+      castShadow
+      receiveShadow
+    >
+      <cylinderBufferGeometry attach="geometry" args={[0.5, 0.5, 4, 32]} />
+      {/* <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />  */}
+      {/* <sphereBufferGeometry attach="geometry" args={[1, 32, 32]} /> */}
+      <meshPhongMaterial
+        attach="material"
+        color="#d0901d"
+        emissive="#aa0000"
+        side="DoubleSide"
+        flatShading="true" />
+    </mesh>
+    </group>
+  );
+}
 
 const Car = (props) => {
-    const [ref, api] = useBox(() => ({ mass: 0, position: [0, 0, 0] }));
+    // car physics body
+    // let chassisShape = new CANNON.Box(new CANNON.Vec3(1, 0.3, 2));
+    // let chassisBody = new CANNON.Body({mass: 150});
+    // chassisBody.addShape(chassisShape);
+    // chassisBody.position.set(0, 0.2, 0);
+    // chassisBody.angularVelocity.set(0, 0, 0); // initial velocity
 
-    const clock = new Clock();
-    let delta = clock.getDelta(); // seconds
-    let moveDistance = 500 * delta; // n pixels per second
-    // let rotateAngle = Math.PI / 2 * delta; // 90 deg per second
+    // let vehicle = new CANNON.RaycastVehicle({
+    //   chassisBody: chassisBody,
+    //   indexRightAxis: 0, // x
+    //   indexUpAxis: 1, // y
+    //   indexForwardAxis: 2, // z
+    // });
 
-    const [currentPosition, setCurrentPosition] = useState({
-        x: 0,
-        y: 0,
-        z: 0
-    })
-    const [currentRotation, setCurrentRotation] = useState({
-        x: 0,
-        y: 0,
-        z: 0
-    })
+    // var options = {
+    //   radius: 0.3,
+    //   directionLocal: new CANNON.Vec3(0, -1, 0),
+    //   suspensionStiffness: 45,
+    //   suspensionRestLength: 0.4,
+    //   frictionSlip: 5,
+    //   dampingRelaxation: 2.3,
+    //   dampingCompression: 4.5,
+    //   maxSuspensionForce: 200000,
+    //   rollInfluence:  0.01,
+    //   axleLocal: new CANNON.Vec3(-1, 0, 0),
+    //   chassisConnectionPointLocal: new CANNON.Vec3(1, 1, 0),
+    //   maxSuspensionTravel: 0.25,
+    //   customSlidingRotationalSpeed: -30,
+    //   useCustomSlidingRotationalSpeed: true,
+    // };
 
-    useFrame(() => {
-        let posChange = false;
-        if (props.forward) {
-            setCurrentPosition({
-                x: currentPosition.x + 0.2,
-                y: 0,
-                z: (currentPosition.x + 0.2) * Math.tan(currentRotation.y + Math.PI / 32)
-            })
-            posChange = true;
-        }
+    // var axlewidth = 0.7;
+    // options.chassisConnectionPointLocal.set(axlewidth, 0, -1);
+    // vehicle.addWheel(options);
 
-        if (props.back) {
-            setCurrentPosition({
-                x: currentPosition.x - 0.2,
-                y: 0,
-                z: (currentPosition.x + 0.2) * Math.tan(currentRotation.y + Math.PI / 32)
-            })
-            posChange = true;
-        }
+    // options.chassisConnectionPointLocal.set(-axlewidth, 0, -1);
+    // vehicle.addWheel(options);
 
-        if (props.left) {
-            setCurrentRotation({
-                x: 0,
-                y: currentRotation.y + Math.PI / 32,
-                z: 0
-            })
-            posChange = true;
-        }
+    // options.chassisConnectionPointLocal.set(axlewidth, 0, 1);
+    // vehicle.addWheel(options);
 
-        if (props.right) {
-            setCurrentRotation({
-                x: 0,
-                y: currentRotation.y - Math.PI / 32,
-                z: 0
-            })
-            posChange = true;
-        }
-        if (posChange) {
-            api.position.set(currentPosition.x, 0, (currentPosition.x + 0.2) * Math.tan(currentRotation.y + Math.PI / 32));
-            api.rotation.set(0, currentRotation.y, 0);
-        }
-    })
+    // options.chassisConnectionPointLocal.set(-axlewidth, 0, 1);
+    // vehicle.addWheel(options);
 
     return (
-        <mesh
-            castShadow
-            onClick={() => {
-                api.velocity.set(0, 5, 0);
-            }}
-            ref={ref}
-            position={[0, 0, 0]}
-            rotation={[0, 0, 0]}
-            scale={[1, 1, 1]}
+      <group>
+        <Wheel
+          forward={props.forward}
+          back={props.back}
+          right={props.right}
+          left={props.left}
+          fast={props.shiftAndKey}
+          esc={props.esc}
         >
-            <Model modelPath={car} materialPath={material} />
-        </mesh>
-    );
-};
+        </Wheel>
+      </group>
+        // 
+          //   <primitive object={vehicle} /> 
+          //   <mesh castShadow receiveShadow>
+          //      <boxBufferGeometry args={[2, 0.6, 4]}/>
+          //      <meshBasicMaterial color={props.color}/>
+          //  </mesh> 
+            
+        
+    )
+}
 
 export default Car

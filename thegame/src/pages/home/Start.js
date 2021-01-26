@@ -123,7 +123,7 @@ const Start = () => {
                     class="start"
                 >
                     <div class="clicktostart">
-                        <a href="/TheGame" class="startgamelink" >
+                        <a href="/Game" class="startgamelink" >
                             CLICK TO START
                         </a>
                     </div>

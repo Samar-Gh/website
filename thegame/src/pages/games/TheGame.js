@@ -2,8 +2,7 @@ import React from 'react';
 import { Canvas } from 'react-three-fiber';
 import { softShadows, OrbitControls } from 'drei';
 import Level1 from './levels/Level1';
-import TextArea from '../TextArea';
-import Start from '../home/Start';
+import TextArea from './TextArea';
 
 // softShadows();
 
@@ -28,8 +27,6 @@ const TheGame = () => {
                 shadow-camera-top={100}
                 shadow-camera-bottom={-100}
             />
-            {/* <Start />
-            <OrbitControls /> */}
             <Level1/>
             <OrbitControls />
             <TextArea />

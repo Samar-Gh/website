@@ -10,6 +10,7 @@ const Plane = (props) => {
         <mesh receiveShadow position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} ref={ref} >
             <planeBufferGeometry attach='geometry' args={props.args} />
             <meshStandardMaterial attach='material' color={props.color} />
+            {/* <gridHelper args={[200, 80]} /> */}
         </mesh>
     )
 }
